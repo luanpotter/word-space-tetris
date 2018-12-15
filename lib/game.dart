@@ -67,6 +67,7 @@ class WSTGame extends BaseGame {
       int changeNum = lastPost.x > halfX ? 1 : -1;
       List<Letter> listLetter = components.where((Component component) => component is Letter).toList().cast<Letter>();
       if(listLetter.isEmpty) return;
+      if(listLetter.last.cold) return;
       listLetter.last.moveToColumn(changeNum);
     }
   }
