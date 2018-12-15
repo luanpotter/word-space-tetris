@@ -5,8 +5,9 @@ import 'package:flame/components/resizable.dart';
 import 'package:flame/sprite.dart';
 
 import '../util.dart';
+import '../mixins/has_game_ref.dart';
 
-class Letter extends SpriteComponent with Resizable {
+class Letter extends SpriteComponent with Resizable, HasGameRef {
   int column;
   String letter;
 
@@ -21,9 +22,11 @@ class Letter extends SpriteComponent with Resizable {
 
   @override
   void update(double t) {
-    y += 75 * t;
-    if (y > size.height - height) {
-      y = size.height - height;
+    y += 256 * t;
+    int myColumnStack = gameRef.lastColumns[this.column] + 1;
+    if (y > size.height - myColumnStack*height) {
+      gameRef.lastColumns[this.column]++;
+      y = size.height - myColumnStack*height;
     }
   }
 
