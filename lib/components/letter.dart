@@ -21,6 +21,13 @@ class Letter extends SpriteComponent with Resizable, HasGameRef {
     return new Sprite('letters.png', x: 85.0 * x, width: 85, height: 85);
   }
 
+  void moveToColumn(int changeCoefficient) {
+    column += changeCoefficient;
+    column = column.clamp(0, COLUMNS -1);
+
+    this.resize(size);
+  }
+
   @override
   void update(double t) {
     if (cold) {

@@ -43,13 +43,31 @@ class WSTGame extends BaseGame {
     super.add(c);
   }
 
+  double letterInterval = 0.0;
+
+  @override
+  void update(double t) {
+    super.update(t);
+    if(status == Status.GAME) {
+      letterInterval += t;
+      if(letterInterval > 5){
+        add(new Letter(random.nextInt(COLUMNS), randomLetter()));
+        letterInterval = 0.0;
+      }
+    }
+  }
+
   void input(Position lastPost, int dt) {
     if (status == Status.MENU) {
       components.clear();
       status = Status.GAME;
       add(new Background());
     } else if (status == Status.GAME) {
-      add(new Letter(random.nextInt(COLUMNS), randomLetter()));
+      double halfX = size.width / 2;
+      int changeNum = lastPost.x > halfX ? 1 : -1;
+      List<Letter> listLetter = components.where((Component component) => component is Letter).toList().cast<Letter>();
+      if(listLetter.isEmpty) return;
+      listLetter.last.moveToColumn(changeNum);
     }
   }
 }
