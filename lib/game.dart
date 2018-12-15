@@ -3,7 +3,9 @@ import 'dart:math';
 import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flame/position.dart';
+
 import 'util.dart';
+import 'matrix.dart';
 
 import 'mixins/has_game_ref.dart';
 import 'components/letter.dart';
@@ -24,6 +26,7 @@ String randomLetter() {
 
 class WSTGame extends BaseGame {
   Status status;
+  Matrix matrix = new Matrix();
   List<int> lastColumns = List.filled(COLUMNS, 0);
 
   WSTGame() {
@@ -86,7 +89,7 @@ class WSTGame extends BaseGame {
   void die() {
     status = Status.OVER;
     components.clear();
-    add(new Background());
-    add(new GameOver());
+    addLater(new Background());
+    addLater(new GameOver());
   }
 }
