@@ -1,0 +1,1 @@
+const COLUMNS = 10;
