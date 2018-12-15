@@ -60,6 +60,9 @@ class Letter extends SpriteComponent with Resizable, HasGameRef {
     int myColumnStack = gameRef.lastColumns[this.column] + 1;
     if (y > size.height - myColumnStack * height) {
       gameRef.lastColumns[this.column]++;
+      if (gameRef.lastColumns[this.column] >= ROWS) {
+        gameRef.die();
+      }
       y = size.height - myColumnStack * height;
       cold = true;
     }
