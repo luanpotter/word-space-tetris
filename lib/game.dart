@@ -38,7 +38,7 @@ class WSTGame extends BaseGame {
   @override
   void add(Component c) {
     if (c is HasGameRef) {
-      c.gameRef = this;
+      (c as HasGameRef).gameRef = this;
     }
     super.add(c);
   }
