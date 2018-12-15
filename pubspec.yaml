@@ -20,6 +20,7 @@ flutter:
 
   assets:
     - assets/images/background.png
+    - assets/images/button.png
     - assets/images/letters.png
     - assets/images/logo.png
     - assets/images/start.png
