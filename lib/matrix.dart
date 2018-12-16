@@ -68,8 +68,12 @@ class Matrix {
     }
   }
 
+  static String _reverse(String str) {
+    return new String.fromCharCodes(str.runes.toList().reversed);
+  }
+
   bool _check(String word) {
-    return WordList.check(word);
+    return WordList.check(word) || WordList.check(_reverse(word));
   }
 
   void _checkWords(int col, int row) {

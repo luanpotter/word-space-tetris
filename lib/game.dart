@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flame/position.dart';
+import 'package:flutter/material.dart' as material;
 
 import 'components/background.dart';
 import 'components/game_over.dart';
@@ -14,7 +15,7 @@ import 'matrix.dart';
 import 'mixins/has_game_ref.dart';
 import 'util.dart';
 
-enum Status { MENU, GAME, PAUSED, OVER }
+enum Status { MENU, GAME, PAUSED, DYING, OVER }
 
 Random random = new Random();
 
@@ -22,7 +23,7 @@ List<String> alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 List<String> more = 'aeioy'.split('');
 
 String randomLetter() {
-  if (random.nextDouble() > 0.17) {
+  if (random.nextDouble() <= 0.2) {
     return more[random.nextInt(more.length)];
   }
   return alphabet[random.nextInt(alphabet.length)];
@@ -30,9 +31,9 @@ String randomLetter() {
 
 class WSTGame extends BaseGame {
   Status status;
-  Matrix matrix = new Matrix();
-  List<int> lastColumns = List.filled(COLUMNS, 0);
-  double letterInterval = 2.0;
+  Matrix matrix;
+  List<int> lastColumns;
+  double letterInterval;
 
   WSTGame() {
     goToMenu();
@@ -59,13 +60,30 @@ class WSTGame extends BaseGame {
   @override
   void render(Canvas canvas) {
     super.render(canvas);
+    if (status == Status.GAME || status == Status.PAUSED) {
+      drawTopLine(canvas);
+    }
     if (status == Status.PAUSED) {
       // TODO render pause button
     }
   }
 
+  void drawTopLine(Canvas canvas) {
+    double maxY = size.height - size.width / COLUMNS * ROWS;
+    Paint paint = new Paint()..color = material.Colors.black;
+    canvas.drawLine(new Offset(0, maxY), new Offset(size.width, maxY), paint);
+  }
+
   @override
   void update(double t) {
+    if (status == Status.DYING) {
+      // TODO animation?
+      components.clear();
+      add(new Background());
+      add(new GameOver());
+      status = Status.OVER;
+      return;
+    }
     if (status == Status.PAUSED) {
       return;
     }
@@ -99,14 +117,14 @@ class WSTGame extends BaseGame {
   void goToGame() {
     components.clear();
     status = Status.GAME;
+    matrix = new Matrix();
+    lastColumns = List.filled(COLUMNS, 0);
+    letterInterval = 2.0;
     add(new Background());
   }
 
   void die() {
-    status = Status.OVER;
-    components.clear();
-    addLater(new Background());
-    addLater(new GameOver());
+    status = Status.DYING;
   }
 
   @override
