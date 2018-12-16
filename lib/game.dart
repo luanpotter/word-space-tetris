@@ -22,7 +22,7 @@ List<String> alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
 List<String> more = 'aeioy'.split('');
 
 String randomLetter() {
-  if (random.nextDouble() > 0.3) {
+  if (random.nextDouble() > 0.17) {
     return more[random.nextInt(more.length)];
   }
   return alphabet[random.nextInt(alphabet.length)];
