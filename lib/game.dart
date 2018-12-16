@@ -1,20 +1,20 @@
 import 'dart:math';
+import 'dart:ui';
 
 import 'package:flame/components/component.dart';
 import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 
-import 'util.dart';
-import 'matrix.dart';
-
-import 'mixins/has_game_ref.dart';
-import 'components/letter.dart';
-import 'components/start_button.dart';
-import 'components/logo.dart';
 import 'components/background.dart';
 import 'components/game_over.dart';
+import 'components/letter.dart';
+import 'components/logo.dart';
+import 'components/start_button.dart';
+import 'matrix.dart';
+import 'mixins/has_game_ref.dart';
+import 'util.dart';
 
-enum Status { MENU, GAME, OVER }
+enum Status { MENU, GAME, PAUSED, OVER }
 
 Random random = new Random();
 
@@ -32,6 +32,7 @@ class WSTGame extends BaseGame {
   Status status;
   Matrix matrix = new Matrix();
   List<int> lastColumns = List.filled(COLUMNS, 0);
+  double letterInterval = 2.0;
 
   WSTGame() {
     goToMenu();
@@ -55,14 +56,23 @@ class WSTGame extends BaseGame {
     super.add(c);
   }
 
-  double letterInterval = 0.0;
+  @override
+  void render(Canvas canvas) {
+    super.render(canvas);
+    if (status == Status.PAUSED) {
+      // TODO render pause button
+    }
+  }
 
   @override
   void update(double t) {
+    if (status == Status.PAUSED) {
+      return;
+    }
     super.update(t);
     if (status == Status.GAME) {
       letterInterval += t;
-      if (letterInterval > 5) {
+      if (letterInterval > 3) {
         add(new Letter(random.nextInt(COLUMNS), randomLetter()));
         letterInterval = 0.0;
       }
@@ -70,7 +80,9 @@ class WSTGame extends BaseGame {
   }
 
   void input(Position lastPost, int dt) {
-    if (status == Status.MENU) {
+    if (status == Status.PAUSED) {
+      status = Status.GAME;
+    } else if (status == Status.MENU) {
       goToGame();
     } else if (status == Status.GAME) {
       double halfX = size.width / 2;
@@ -95,5 +107,22 @@ class WSTGame extends BaseGame {
     components.clear();
     addLater(new Background());
     addLater(new GameOver());
+  }
+
+  @override
+  void lifecycleStateChange(AppLifecycleState state) {
+    if (state != AppLifecycleState.resumed) {
+      if (status == Status.GAME) {
+        status = Status.PAUSED;
+      }
+    }
+  }
+
+  didPop() {
+    if (status == Status.MENU) {
+      return true;
+    }
+    status = Status.MENU;
+    return false;
   }
 }

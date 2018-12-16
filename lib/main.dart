@@ -15,7 +15,17 @@ main() async {
 
   await WordList.init();
   WSTGame game = new WSTGame();
-  runApp(game.widget);
+
+  runApp(new MaterialApp(
+    routes: {
+      '/': (BuildContext ctx) => new Scaffold(body: new WillPopScope(
+        onWillPop: () async {
+          return game.didPop();
+        },
+        child: game.widget,
+      )),
+    },
+  ));
 
   int lastTimestamp;
   Position lastPost;

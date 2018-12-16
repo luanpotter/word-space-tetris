@@ -34,7 +34,6 @@ class Matrix {
   void _award(int col, int row) {
     matrix[col][row].award();
     _removeLater.add(new _Point(col, row));
-    matrix[col][row] = null;
     for (int i = row + 1; i < ROWS; i++) {
       matrix[col][i]?.awake();
       _removeLater.add(new _Point(col, i));
