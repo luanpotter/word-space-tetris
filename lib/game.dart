@@ -19,8 +19,12 @@ enum Status { MENU, GAME, OVER }
 Random random = new Random();
 
 List<String> alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
+List<String> more = 'aeioy'.split('');
 
 String randomLetter() {
+  if (random.nextDouble() > 0.3) {
+    return more[random.nextInt(more.length)];
+  }
   return alphabet[random.nextInt(alphabet.length)];
 }
 
@@ -73,7 +77,7 @@ class WSTGame extends BaseGame {
       int changeNum = lastPost.x > halfX ? 1 : -1;
       List<Letter> listLetter = components.where((Component component) => component is Letter).toList().cast<Letter>();
       if (listLetter.isEmpty) return;
-      if (listLetter.last.cold) return;
+      if (!listLetter.last.alive) return;
       listLetter.last.moveToColumn(changeNum);
     } else if (status == Status.OVER) {
       goToMenu();

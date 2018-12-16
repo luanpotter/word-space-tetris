@@ -19,6 +19,7 @@ flutter:
   uses-material-design: false
 
   assets:
+    - assets/txt/words.txt
     - assets/images/background.png
     - assets/images/button.png
     - assets/images/letters.png

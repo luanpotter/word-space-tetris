@@ -6,12 +6,14 @@ import 'package:flutter/services.dart';
 import 'package:flutter/widgets.dart';
 
 import 'game.dart';
+import 'word_list.dart';
 
 main() async {
   Flame.audio.disableLog();
   Flame.util.fullScreen();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
+  await WordList.init();
   WSTGame game = new WSTGame();
   runApp(game.widget);
 

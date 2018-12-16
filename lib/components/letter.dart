@@ -10,13 +10,19 @@ import '../mixins/has_game_ref.dart';
 
 math.Random random = new math.Random();
 
+enum Status {
+  ALIVE, COLD, DYING, DEAD
+}
+
 class Letter extends SpriteComponent with Resizable, HasGameRef {
   int column;
   String letter;
-  bool cold = false;
+  Status status = Status.ALIVE;
 
   double angleSlant;
   double dxTween;
+
+  bool get alive => status == Status.ALIVE;
 
   Letter(this.column, this.letter) : super.fromSprite(32.0, 32.0, _sprite(letter)) {
     y = 0;
@@ -41,31 +47,38 @@ class Letter extends SpriteComponent with Resizable, HasGameRef {
 
   @override
   void update(double t) {
-    if (cold) {
-      if (angle < 0) {
-        angle += 4 * t;
-        if (angle > 0) {
-          angle = 0;
-        }
-      } else if (angle > 0) {
-        angle -= 4 * t;
-        if (angle < 0) {
-          angle = 0;
-        }
-      }
-
+    if (status == Status.DYING) {
+      updateDead(t);
+      return;
+    }
+    if (status == Status.COLD) {
+      updateCold(t);
       return;
     }
     y += 256 * t;
     int myColumnStack = gameRef.lastColumns[this.column] + 1;
     if (y > size.height - myColumnStack * height) {
+      status = Status.COLD;
       gameRef.lastColumns[this.column]++;
-      gameRef.matrix.set(this.column, myColumnStack, this.letter);
+      gameRef.matrix.set(this.column, myColumnStack, this);
       if (gameRef.lastColumns[this.column] >= ROWS) {
         gameRef.die();
       }
       y = size.height - myColumnStack * height;
-      cold = true;
+    }
+  }
+
+  void updateCold(double t) {
+    if (angle < 0) {
+      angle += 4 * t;
+      if (angle > 0) {
+        angle = 0;
+      }
+    } else if (angle > 0) {
+      angle -= 4 * t;
+      if (angle < 0) {
+        angle = 0;
+      }
     }
   }
 
@@ -78,4 +91,25 @@ class Letter extends SpriteComponent with Resizable, HasGameRef {
 
   @override
   int priority() => 2;
+
+  void award() {
+    if (status != Status.DYING && status != Status.DEAD) {
+      status = Status.DYING;
+      gameRef.lastColumns[this.column]--;
+    }
+  }
+
+  void updateDead(double t) {
+    // TODO animation
+    status = Status.DEAD;
+  }
+
+  @override
+  bool destroy() => status == Status.DEAD;
+
+  void awake() {
+    if (status == Status.COLD) {
+      status = Status.ALIVE;
+    }
+  }
 }
