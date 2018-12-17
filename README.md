@@ -1,16 +1,3 @@
 # word_space_tetris
 
-A new Flutter project.
-
-## Getting Started
-
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://flutter.io/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.io/docs/cookbook)
-
-For help getting started with Flutter, view our 
-[online documentation](https://flutter.io/docs), which offers tutorials, 
-samples, guidance on mobile development, and a full API reference.
+Instead of blocks, letters fall from a spaceship. Move this letters left and right tap either sides of your phone and wait for then to reach the bottom. Form words in the grid and they disappear. But be careful: you must eliminate tiles because if they reach the top, you lose!
