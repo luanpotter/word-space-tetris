@@ -11,23 +11,16 @@ import 'components/game_over.dart';
 import 'components/letter.dart';
 import 'components/logo.dart';
 import 'components/start_button.dart';
-import 'matrix.dart';
 import 'mixins/has_game_ref.dart';
+import 'matrix.dart';
+import 'word_list.dart';
 import 'util.dart';
 
 enum Status { MENU, GAME, PAUSED, DYING, OVER }
 
 Random random = new Random();
 
-List<String> alphabet = 'abcdefghijklmnopqrstuvwxyz'.split('');
-List<String> more = 'aeioy'.split('');
-
-String randomLetter() {
-  if (random.nextDouble() <= 0.2) {
-    return more[random.nextInt(more.length)];
-  }
-  return alphabet[random.nextInt(alphabet.length)];
-}
+String randomLetter() => WordList.nextLetter(random.nextDouble());
 
 class WSTGame extends BaseGame {
   Status status;

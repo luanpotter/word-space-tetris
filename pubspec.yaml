@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   flame: ^0.9.5
+  diacritic: ^0.1.0
   flutter:
     sdk: flutter
 
@@ -19,7 +20,10 @@ flutter:
   uses-material-design: false
 
   assets:
-    - assets/txt/words.txt
+    - assets/txt/words-pt-br.txt
+    - assets/txt/letters-pt-br.txt
+    - assets/txt/words-en-us.txt
+    - assets/txt/letters-en-us.txt
     - assets/images/background.png
     - assets/images/button.png
     - assets/images/letters.png

@@ -96,7 +96,9 @@ class Letter extends SpriteComponent with Resizable, HasGameRef {
   void award() {
     if (status != Status.DYING && status != Status.DEAD) {
       status = Status.DYING;
-      gameRef.lastColumns[this.column]--;
+      int row = ((size.height - (y + height)) / height).round();
+      int actualRow = math.min(row, gameRef.lastColumns[this.column]);
+      gameRef.lastColumns[this.column] = actualRow;
     }
   }
 

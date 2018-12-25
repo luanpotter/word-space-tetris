@@ -13,10 +13,11 @@ main() async {
   Flame.util.fullScreen();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await WordList.init();
+  await WordList.init('en-us');
   WSTGame game = new WSTGame();
 
   runApp(new MaterialApp(
+    debugShowCheckedModeBanner: false,
     routes: {
       '/': (BuildContext ctx) => new Scaffold(body: new WillPopScope(
         onWillPop: () async {
