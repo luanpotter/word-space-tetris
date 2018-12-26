@@ -34,5 +34,8 @@ flutter:
     - assets/images/button.png
     - assets/images/letters.png
     - assets/images/logo.png
-    - assets/images/start.png
+    - assets/images/start-en-us.png
+    - assets/images/start-pt-br.png
     - assets/images/ship.png
+    - assets/images/lang-en-us.png
+    - assets/images/lang-pt-br.png

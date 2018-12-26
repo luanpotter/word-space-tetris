@@ -4,15 +4,15 @@ import 'package:flame/components/component.dart';
 import 'package:flame/sprite.dart';
 import '../mixins/lang_dependent.dart';
 
-class StartButton extends SpriteComponent with LangDependent {
+class LangButton extends SpriteComponent with LangDependent {
   static const S = 0.5;
 
-  StartButton(String lang) : super.rectangle(S * 580, S * 279, 'start-$lang.png');
+  LangButton(String lang) : super.rectangle(S * 120, S * 50, 'lang-$lang.png');
 
   @override
   void resize(Size size) {
     x = (size.width - width) / 2;
-    y = size.height - height - 64;
+    y = 8.0;
   }
 
   @override
@@ -20,6 +20,6 @@ class StartButton extends SpriteComponent with LangDependent {
 
   @override
   void didChangeLanguage(String newLang) {
-    sprite = new Sprite('start-$newLang.png');
+    sprite = new Sprite('lang-$newLang.png');
   }
 }

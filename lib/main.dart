@@ -9,12 +9,13 @@ import 'game.dart';
 import 'word_list.dart';
 
 main() async {
+  String startingLang = 'en-us';
   Flame.audio.disableLog();
   Flame.util.fullScreen();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await WordList.init('pt-br');
-  WSTGame game = new WSTGame();
+  await WordList.init(startingLang);
+  WSTGame game = new WSTGame(startingLang);
 
   runApp(new MaterialApp(
     debugShowCheckedModeBanner: false,

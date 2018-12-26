@@ -2,6 +2,7 @@ import 'dart:math';
 import 'dart:ui';
 
 import 'package:flame/components/component.dart';
+import 'package:flame/flame.dart';
 import 'package:flame/game.dart';
 import 'package:flame/position.dart';
 import 'package:flutter/material.dart' as material;
@@ -11,24 +12,27 @@ import 'components/game_over.dart';
 import 'components/letter.dart';
 import 'components/logo.dart';
 import 'components/start_button.dart';
+import 'components/lang_button.dart';
 import 'mixins/has_game_ref.dart';
+import 'mixins/lang_dependent.dart';
 import 'matrix.dart';
 import 'word_list.dart';
 import 'util.dart';
 
-enum Status { MENU, GAME, PAUSED, DYING, OVER }
+enum Status { LOADING, MENU, GAME, PAUSED, DYING, OVER }
 
 Random random = new Random();
 
 String randomLetter() => WordList.nextLetter(random.nextDouble());
 
 class WSTGame extends BaseGame {
+  String lang;
   Status status;
   Matrix matrix;
   List<int> lastColumns;
   double letterInterval;
 
-  WSTGame() {
+  WSTGame(this.lang) {
     goToMenu();
   }
 
@@ -37,7 +41,18 @@ class WSTGame extends BaseGame {
 
     add(new Background());
     add(new Logo());
-    add(new StartButton());
+    add(new StartButton(lang));
+    add(new LangButton(lang));
+  }
+
+  void toggleLang() async {
+    String newLang = lang == 'en-us' ? 'pt-br' : 'en-us';
+
+    await WordList.init(newLang);
+    components.where((c) => c is LangDependent).forEach((c) => (c as LangDependent).didChangeLanguage(newLang));
+
+    lang = newLang;
+    status = Status.MENU;
   }
 
   bool handlingClick() => true;
@@ -52,6 +67,11 @@ class WSTGame extends BaseGame {
 
   @override
   void render(Canvas canvas) {
+    if (status == Status.LOADING) {
+      material.TextPainter text = Flame.util.text('Loading...', fontSize: 24.0);
+      text.paint(canvas, new Offset((size.width - text.width) / 2, (size.height - text.height) / 2));
+      return; // TODO render prettier loading...
+    }
     super.render(canvas);
     if (status == Status.GAME || status == Status.PAUSED) {
       drawTopLine(canvas);
@@ -69,8 +89,11 @@ class WSTGame extends BaseGame {
 
   @override
   void update(double t) {
+    if (status == Status.LOADING) {
+      return;
+    }
     if (status == Status.DYING) {
-      // TODO animation?
+      // TODO death animation?
       components.clear();
       add(new Background());
       add(new GameOver());
@@ -90,14 +113,23 @@ class WSTGame extends BaseGame {
     }
   }
 
-  void input(Position lastPost, int dt) {
-    if (status == Status.PAUSED) {
+  void input(Position lastPos, int dt) {
+    double halfX = size.width / 2;
+    double halfY = size.height / 2;
+
+    if (status == Status.LOADING) {
+      return;
+    } else if (status == Status.PAUSED) {
       status = Status.GAME;
     } else if (status == Status.MENU) {
-      goToGame();
+      if (lastPos.y < halfY) {
+        status = Status.LOADING;
+        toggleLang();
+      } else {
+        goToGame();
+      }
     } else if (status == Status.GAME) {
-      double halfX = size.width / 2;
-      int changeNum = lastPost.x > halfX ? 1 : -1;
+      int changeNum = lastPos.x > halfX ? 1 : -1;
       List<Letter> listLetter = components.where((Component component) => component is Letter).toList().cast<Letter>();
       if (listLetter.isEmpty) return;
       if (!listLetter.last.alive) return;
