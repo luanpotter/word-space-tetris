@@ -6,6 +6,7 @@ import 'package:flame/components/resizable.dart';
 import 'package:flame/sprite.dart';
 
 import '../util.dart';
+import '../matrix.dart';
 import '../mixins/has_game_ref.dart';
 
 math.Random random = new math.Random();
@@ -14,7 +15,7 @@ enum Status {
   ALIVE, COLD, DYING, DEAD
 }
 
-class Letter extends SpriteComponent with Resizable, HasGameRef {
+class Letter extends SpriteComponent with Resizable, HasGameRef implements ILetter {
   int column;
   String letter;
   Status status = Status.ALIVE;

@@ -13,7 +13,7 @@ main() async {
   Flame.util.fullScreen();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
 
-  await WordList.init('en-us');
+  await WordList.init('pt-br');
   WSTGame game = new WSTGame();
 
   runApp(new MaterialApp(
