@@ -39,6 +39,7 @@ class WSTGame extends BaseGame {
   void goToMenu() {
     status = Status.MENU;
 
+    components.clear();
     add(new Background());
     add(new Logo());
     add(new StartButton(lang));
@@ -94,10 +95,7 @@ class WSTGame extends BaseGame {
     }
     if (status == Status.DYING) {
       // TODO death animation?
-      components.clear();
-      add(new Background());
-      add(new GameOver());
-      status = Status.OVER;
+      goToGameOver();
       return;
     }
     if (status == Status.PAUSED) {
@@ -111,6 +109,13 @@ class WSTGame extends BaseGame {
         letterInterval = 0.0;
       }
     }
+  }
+
+  void goToGameOver() {
+    components.clear();
+    add(new Background());
+    add(new GameOver());
+    status = Status.OVER;
   }
 
   void input(Position lastPos, int dt) {
