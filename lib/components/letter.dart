@@ -56,7 +56,7 @@ class Letter extends SpriteComponent with Resizable, HasGameRef implements ILett
       updateCold(t);
       return;
     }
-    y += 256 * t;
+    y += 256 * t * 10;
     int row = gameRef.lastColumns[this.column];
     int myColumnStackSize = row + 1;
     if (y > size.height - myColumnStackSize * height) {

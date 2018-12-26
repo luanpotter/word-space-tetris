@@ -9,15 +9,15 @@ import 'package:flutter/material.dart' as material;
 
 import 'components/background.dart';
 import 'components/game_over.dart';
+import 'components/lang_button.dart';
 import 'components/letter.dart';
 import 'components/logo.dart';
 import 'components/start_button.dart';
-import 'components/lang_button.dart';
+import 'matrix.dart';
 import 'mixins/has_game_ref.dart';
 import 'mixins/lang_dependent.dart';
-import 'matrix.dart';
-import 'word_list.dart';
 import 'util.dart';
+import 'word_list.dart';
 
 enum Status { LOADING, MENU, GAME, PAUSED, DYING, OVER }
 
@@ -104,7 +104,7 @@ class WSTGame extends BaseGame {
     super.update(t);
     if (status == Status.GAME) {
       letterInterval += t;
-      if (letterInterval > 3) {
+      if (letterInterval > 3 / 10) {
         add(new Letter(random.nextInt(COLUMNS), randomLetter()));
         letterInterval = 0.0;
       }

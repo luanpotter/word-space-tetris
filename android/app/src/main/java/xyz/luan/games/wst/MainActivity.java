@@ -1,4 +1,4 @@
-package com.example.wordspacetetris;
+package xyz.luan.games.wst;
 
 import android.os.Bundle;
 import io.flutter.app.FlutterActivity;

@@ -12,7 +12,7 @@ class WordList {
   static Future<void> init(String lang) async {
     String wordData = await getFileData('assets/txt/words-$lang.txt');
     words.clear();
-    words.addAll(wordData.split('\n').where((w) => w.length >= 3 && !w.contains('-') && !w.contains('.') && !_isUpperCase(w[0])).map(removeDiacritics));
+    words.addAll(wordData.split('\n').where((w) => w.length > 3 && !w.contains('-') && !w.contains('.') && !_isUpperCase(w[0])).map(removeDiacritics));
 
     String letterData = await getFileData('assets/txt/letters-$lang.txt');
     frequencies.clear();
