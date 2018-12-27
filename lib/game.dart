@@ -104,7 +104,7 @@ class WSTGame extends BaseGame {
     super.update(t);
     if (status == Status.GAME) {
       letterInterval += t;
-      if (letterInterval > 3 / 10) {
+      if (letterInterval > 3) {
         add(new Letter(random.nextInt(COLUMNS), randomLetter()));
         letterInterval = 0.0;
       }
