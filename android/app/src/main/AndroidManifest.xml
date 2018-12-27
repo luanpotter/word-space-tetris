@@ -4,7 +4,7 @@
 
     <application
         android:name="io.flutter.app.FlutterApplication"
-        android:label="word_space_tetris"
+        android:label="Word Space Tetris"
         android:icon="@mipmap/launcher_icon">
         <activity
             android:name=".MainActivity"
